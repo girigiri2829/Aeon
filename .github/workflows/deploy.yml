@@ -67,7 +67,7 @@ jobs:
           team: ${{ inputs.HEROKU_TEAM_NAME != '' && format('{0}', inputs.HEROKU_TEAM_NAME) || '' }}
           usedocker: true
           docker_heroku_process_type: web
-          stack: "container"
+          stack: "heroku-24"
           region: "eu"
         env:
           HD_OWNER_ID: ${{inputs.OWNER_ID}}
