@@ -65,8 +65,6 @@ jobs:
           heroku_app_name: ${{inputs.HEROKU_APP_NAME}}
           heroku_email: ${{inputs.HEROKU_EMAIL}}
           team: ${{ inputs.HEROKU_TEAM_NAME != '' && format('{0}', inputs.HEROKU_TEAM_NAME) || '' }}
-          usedocker: false
-          docker_heroku_process_type: web
           stack: "heroku-24"
           region: "us"
         env:
