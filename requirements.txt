@@ -41,3 +41,4 @@ uv
 uvloop
 xattr
 yt-dlp[default]
+pytz
