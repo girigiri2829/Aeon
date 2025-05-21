@@ -150,10 +150,10 @@ class TelegramUploader:
 
     async def _prepare_file(self, file_, dirpath):
         if self._lcaption:
-            cap_mono = await generate_caption(file_, dirpath, self._lcaption)
+            cap_bold = await generate_caption(file_, dirpath, self._lcaption)
         if self._lprefix:
             if not self._lcaption:
-                cap_mono = f"{self._lprefix} {file_}"
+                cap_bold = f"{self._lprefix} {file_}"
             self._lprefix = re_sub("<.*?>", "", self._lprefix)
             new_path = ospath.join(dirpath, f"{self._lprefix} {file_}")
             LOGGER.info(self._up_path)
@@ -161,7 +161,7 @@ class TelegramUploader:
             self._up_path = new_path
             LOGGER.info(self._up_path)
         if not self._lcaption and not self._lprefix:
-            cap_mono = f"<code>{file_}</code>"
+            cap_bold = f"<code>{file_}</code>"
         if len(file_) > 60:
             if is_archive(file_):
                 name = get_base_name(file_)
@@ -273,7 +273,7 @@ class TelegramUploader:
                         continue
                     if self._listener.is_cancelled:
                         return
-                    cap_mono = await self._prepare_file(file_, dirpath)
+                    cap_bold = await self._prepare_file(file_, dirpath)
                     if self._last_msg_in_group:
                         group_lists = [
                             x for v in self._media_dict.values() for x in v
@@ -312,7 +312,7 @@ class TelegramUploader:
                             )
                     self._last_msg_in_group = False
                     self._last_uploaded = 0
-                    await self._upload_file(cap_mono, file_, f_path)
+                    await self._upload_file(cap_bold, file_, f_path)
                     if self._listener.is_cancelled:
                         return
                     if (
@@ -372,7 +372,7 @@ class TelegramUploader:
         stop=stop_after_attempt(3),
         retry=retry_if_exception_type(Exception),
     )
-    async def _upload_file(self, cap_mono, file, o_path, force_document=False):
+    async def _upload_file(self, cap_bold, file, o_path, force_document=False):
         if (
             self._thumb is not None
             and not await aiopath.exists(self._thumb)
@@ -409,7 +409,7 @@ class TelegramUploader:
                     document=self._up_path,
                     quote=True,
                     thumb=thumb,
-                    caption=cap_mono,
+                    caption=cap_bold,
                     force_document=True,
                     disable_notification=True,
                     progress=self._upload_progress,
@@ -438,7 +438,7 @@ class TelegramUploader:
                 self._sent_msg = await self._sent_msg.reply_video(
                     video=self._up_path,
                     quote=True,
-                    caption=cap_mono,
+                    caption=cap_bold,
                     duration=duration,
                     width=width,
                     height=height,
@@ -455,7 +455,7 @@ class TelegramUploader:
                 self._sent_msg = await self._sent_msg.reply_audio(
                     audio=self._up_path,
                     quote=True,
-                    caption=cap_mono,
+                    caption=cap_bold,
                     duration=duration,
                     performer=artist,
                     title=title,
@@ -470,7 +470,7 @@ class TelegramUploader:
                 self._sent_msg = await self._sent_msg.reply_photo(
                     photo=self._up_path,
                     quote=True,
-                    caption=cap_mono,
+                    caption=cap_bold,
                     disable_notification=True,
                     progress=self._upload_progress,
                 )
