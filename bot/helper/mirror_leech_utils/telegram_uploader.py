@@ -150,10 +150,10 @@ class TelegramUploader:
 
     async def _prepare_file(self, file_, dirpath):
         if self._lcaption:
-            cap_bold = await generate_caption(file_, dirpath, self._lcaption)
+            await generate_caption(file_, dirpath, self._lcaption)
         if self._lprefix:
             if not self._lcaption:
-                cap_bold = f"{self._lprefix} {file_}"
+                pass
             self._lprefix = re_sub("<.*?>", "", self._lprefix)
             new_path = ospath.join(dirpath, f"{self._lprefix} {file_}")
             LOGGER.info(self._up_path)
@@ -161,7 +161,7 @@ class TelegramUploader:
             self._up_path = new_path
             LOGGER.info(self._up_path)
         if not self._lcaption and not self._lprefix:
-            cap_bold = f"<code>{file_}</code>"
+            pass
         if len(file_) > 60:
             if is_archive(file_):
                 name = get_base_name(file_)
